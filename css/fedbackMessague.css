@@ -1,0 +1,36 @@
+.feedback-personalizada {
+    position: fixed;
+    top: 0px;
+    margin-left: 50%;
+    margin-right: 50%;
+    border-radius: 15px;
+    padding: 3px;
+    color: white;
+    min-width: 150px;
+    min-height: 35px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 6px;
+    transform: translateY(-40px);
+    transition: 0.3s;
+}
+
+.info {
+    background-color: var(--color-primary);
+}
+
+.sucess {
+    background-color: var(--color-success);
+}
+
+.warning {
+    background-color: var(--color-warning);
+}
+
+.error {
+    background-color: var(--color-error);
+}
+
+.feedback-personalizada-active {
+    transform: translateY(5px);
+}
