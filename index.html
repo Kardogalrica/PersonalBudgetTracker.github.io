@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Despesas Pessoais</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="css/fedbackMessague.css">
+    <script defer src="js/tabs.js"></script>
+    <script defer src="js/inputFile.js"></script>
+    <script defer src="js/fedbackMessague.js"></script>
+    <script defer src="js/controller.js"></script>
+    <script defer src="js/grafico.js"></script>
+    <script defer src="js/list.js"></script>
+    <script defer src="js/script.js"></script>
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
+</head>
+<body class="display-flex justify-content-center align-content-center align-items-center">
+    <div class="display-flex flex-direction-column card gap-base padding-base" style="min-width:310px;">
+        <h1>Gestão de Despesas Pessoais</h1>
+        <div class="section">
+            <div class="tabs" data-tabs>
+                <div class="tabs-header">
+                    <button type="button" class="is-active" data-tab-index="0">Adicionar Transação</button>
+                    <button type="button" data-tab-index="1">Upload File</button>
+                </div>
+                <div class="tab-content">
+                    <form class="display-flex flex-direction-column gap-xs" data-tab-index="0">
+                    <div>
+                        <div class="display-flex flex-direction-column">
+                            <input type="text" id="descricao" placeholder="Descrição" autofocus>
+                            <span id="error-descricao" class="error-messague"></span>
+                        </div>
+                    </div>
+                    <div class="display-flex flex-direction-row gap-xs">
+                        <div class="flex3 display-flex flex-direction-column">
+                            <input type="number" id="valor" placeholder="Valor" min="0" max="10000" step="0.05">
+                            <span id="error-number" class="error-messague"></span>
+                        </div>
+                        <div class="flex1 display-flex flex-direction-column">
+                            <select id="despesa">
+                                <option value="" selected>-Selecionar-</option>
+                                <option value="1">Receita</option>
+                                <option value="2">Despesa</option>
+                            </select>
+                            <span id="error-despesa" class="error-messague"></span>
+                        </div>
+                    </div>
+                    <button id="submit" class="btn btn-primary" type="submit">Adicionar</button>                
+                </form>
+                <div class="display-flex flex-direction-column gap-xs margin-top-base not-visible" data-tab-index="1">
+                    <div class="display-flex flex-direction-column gap-xs">
+                        <div data-inputfile class="file-input">
+                            <input type="file" id="inputfile" accept=".xlsx, .xls">
+                            <div>
+                                <button class="btn btn-primary">Escolher Ficheiro</button>
+                                <div tabindex="0" id="containerChoseInput">Escolha um ficheiro</div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-success" id="btnUpload" style="min-width: 104px;">Upload File</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="section display-flex flex-direction-column gap-xs" id="saldo">
+            <div class="display-flex flex-direction-row align-items-center justify-content-space-between margin-bottom-xs">
+                <h3>Saldo Atual</h3>
+                <h3 id='saldoActual'></h3>
+            </div>
+            <div class="display-flex flex-direction-column gap-xs list-Saldo">
+                <div class="display-flex flex-direction-row justify-content-space-between text-success" tabindex="0">
+                    <div>Receitas</div>
+                    <div id="totalReceita"></div>
+                </div>
+                <div class="display-flex flex-direction-row justify-content-space-between text-error" tabindex="0">
+                    <div>Despesas</div>
+                    <div id="totalDespesa"></div>
+                </div>
+            </div>
+        </div>
+        <div id="historicoGrafico" class="section margin-bottom-xs">
+            <div class="tabs" data-tabs>
+                <div class="tabs-header">
+                    <button type="button" class="is-active" data-tab-index="0">Histórico</button>
+                    <button type="button" data-tab-index="1">Gráfico</button>
+                </div>
+                <div class="tab-content">
+                    <div data-tab-index="0">
+                        <div class="display-flex justify-content-space-between align-items-center">
+                            <div class="display-flex gap-base margin-bottom-base margin-top-base">
+                                <div>
+                                    <input data-type type="radio" name="type" value="0" id="todos" class="not-visible" checked>
+                                    <label for="todos" class="cursor-pointer">Todos</label>
+                                </div>
+                                <div>
+                                    <input data-type type="radio" name="type" value="1" id="receita" class="not-visible">
+                                    <label for="receita" class="cursor-pointer">Receita</label>
+                                </div>
+                                <div>
+                                    <input data-type type="radio" name="type" value="2" id="rdespesa" class="not-visible">
+                                    <label for="rdespesa" class="cursor-pointer">Despesa</label>
+                                </div>
+                            </div>
+
+                            <div class="display-flex flex-direction-row gap-base">
+                                <i id="limpar" class="fa fa-solid fa-trash text-info cursor-pointer text-font-size-20" title="Limpar Histórico"></i>
+                                <i id="download" class="fa-solid fa-download text-info cursor-pointer text-font-size-20" title="Download Histórico"></i>
+                            </div>
+
+                        </div>
+                        <div id="list" class="list scroll-y">
+                        </div>
+                    </div>
+                    <div data-tab-index="1" class="not-visible">
+                        <canvas id="graficoExpense" width="100%" height="75" min-width="250px"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+</body>
+</html>
